@@ -13,6 +13,8 @@ return [
     |
     */
 
+    'languages' => ['en', 'tr'],
+
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
