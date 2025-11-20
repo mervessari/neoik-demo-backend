@@ -2,44 +2,37 @@
 
 namespace App\Repositories;
 
+
+use App\Models\Hero;
+
 class HeroRepository
 {
-    public function get(): array
+    public function all()
     {
-        return [
-            'badge' => __('hero.badge'),
-            'title' => __('hero.title'),
-            'titleHighlight' => __('hero.titleHighlight'),
-            'subtitle' => __('hero.subtitle'),
-            'buttonText' => __('hero.buttonText'),
-            'trustedBy' => __('hero.trustedBy'),
-            'features' => [
-                'employees' => [
-                    'title' => __('hero.features.employees.title'),
-                    'description' => __('hero.features.employees.description'),
-                    'items' => __('hero.features.employees.items'),
-                ],
-                'attendance' => [
-                    'title' => __('hero.features.attendance.title'),
-                    'description' => __('hero.features.attendance.description'),
-                    'items' => __('hero.features.attendance.items'),
-                ],
-                'payroll' => [
-                    'title' => __('hero.features.payroll.title'),
-                    'description' => __('hero.features.payroll.description'),
-                    'items' => __('hero.features.payroll.items'),
-                ],
-                'performance' => [
-                    'title' => __('hero.features.performance.title'),
-                    'description' => __('hero.features.performance.description'),
-                    'items' => __('hero.features.performance.items'),
-                ],
-            ],
-            'highlights' => [
-                'noCreditCard' => __('hero.highlights.noCreditCard'),
-                'cancelAnytime' => __('hero.highlights.cancelAnytime'),
-                'freeTrial' => __('hero.highlights.freeTrial'),
-            ],
-        ];
+        return Hero::all();
+    }
+
+    public function find($id)
+    {
+        return Hero::findOrFail($id);
+    }
+
+    public function create(array $data)
+    {
+        return Hero::create($data);
+    }
+
+    public function update($id, array $data)
+    {
+        $hero = Hero::findOrFail($id);
+        $hero->update($data);
+        return $hero;
+    }
+
+    public function delete($id)
+    {
+        $hero = Hero::findOrFail($id);
+        $hero->delete();
+        return true;
     }
 }

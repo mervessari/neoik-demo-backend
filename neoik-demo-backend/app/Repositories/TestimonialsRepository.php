@@ -2,34 +2,36 @@
 
 namespace App\Repositories;
 
+use App\Models\Testimonial;
+
 class TestimonialsRepository
 {
-    public function get(): array
+    public function all()
     {
-        return [
-            'badge' => __('testimonials.badge'),
-            'title' => __('testimonials.title'),
-            'subtitle' => __('testimonials.subtitle'),
-            'cta' => [
-                'title' => __('testimonials.cta.title'),
-                'subtitle' => __('testimonials.cta.subtitle'),
-                'button' => __('testimonials.cta.button'),
-            ],
-            'mehmet' => [
-                'name' => __('testimonials.mehmet.name'),
-                'position' => __('testimonials.mehmet.position'),
-                'feedback' => __('testimonials.mehmet.feedback'),
-            ],
-            'semih' => [
-                'name' => __('testimonials.semih.name'),
-                'position' => __('testimonials.semih.position'),
-                'feedback' => __('testimonials.semih.feedback'),
-            ],
-            'abdurrahman' => [
-                'name' => __('testimonials.abdurrahman.name'),
-                'position' => __('testimonials.abdurrahman.position'),
-                'feedback' => __('testimonials.abdurrahman.feedback'),
-            ],
-        ];
+        return Testimonial::all();
+    }
+
+    public function find($id)
+    {
+        return Testimonial::findOrFail($id);
+    }
+
+    public function create(array $data)
+    {
+        return Testimonial::create($data);
+    }
+
+    public function update($id, array $data)
+    {
+        $testimonial = Testimonial::findOrFail($id);
+        $testimonial->update($data);
+        return $testimonial;
+    }
+
+    public function delete($id)
+    {
+        $testimonial = Testimonial::findOrFail($id);
+        $testimonial->delete();
+        return true;
     }
 }

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'languages' => ['en', 'tr'],
+    'languages' => explode(',', env('APP_LANGUAGES', 'en,tr')),
 
     'name' => env('APP_NAME', 'Laravel'),
 

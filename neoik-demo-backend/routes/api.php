@@ -6,9 +6,14 @@ use App\Http\Controllers\Api\HrSolutionsController;
 use App\Http\Controllers\Api\IndustrySolutionsController;
 use App\Http\Controllers\Api\TestimonialsController;
 
-Route::get('/nav', [NavController::class, 'index']);
-Route::get('/hero', [HeroController::class, 'index']);
-Route::get('/hr-solutions', [HrSolutionsController::class, 'index']);
-Route::get('/industry-solutions', [IndustrySolutionsController::class, 'index']);
-Route::get('/testimonials', [TestimonialsController::class, 'index']);
+Route::apiResource('nav', NavController::class);
+Route::apiResource('hero', HeroController::class);
+Route::apiResource('hr-solutions', HrSolutionsController::class);
+Route::apiResource('industry-solutions', IndustrySolutionsController::class);
+Route::apiResource('testimonials', TestimonialsController::class);
 
+Route::apiResource('nav', NavController::class);
+Route::apiResource('hero', HeroController::class);
+Route::apiResource('hr-solutions', HrSolutionsController::class);
+Route::apiResource('industry-solutions', IndustrySolutionsController::class);
+Route::apiResource('testimonials', TestimonialsController::class);

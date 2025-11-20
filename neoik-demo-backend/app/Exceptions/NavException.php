@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 class NavException extends BaseException
 {
-    // BaseException tüm davranışı içeriyor.
-    // Buraya özel bir şey eklemeye şu an gerek yok.
+    public static function notFound($id)
+    {
+        return new self("Nav with ID $id not found.");
+    }
 }

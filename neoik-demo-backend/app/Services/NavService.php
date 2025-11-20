@@ -13,8 +13,36 @@ class NavService
         $this->repository = $repository;
     }
 
-    public function getNav(): array
+    public function getNavs($filter = null)
     {
-        return $this->repository->get();
+        $items = $this->repository->all();
+        if ($filter) {
+            $items = $items->where('clients', $filter);
+        }
+        $items->transform(function ($item) {
+            $item->contact = strtoupper($item->contact);
+            return $item;
+        });
+        return $items;
+    }
+
+    public function getNav($id)
+    {
+        return $this->repository->find($id);
+    }
+
+    public function createNav($data)
+    {
+        return $this->repository->create($data);
+    }
+
+    public function updateNav($id, $data)
+    {
+        return $this->repository->update($id, $data);
+    }
+
+    public function deleteNav($id)
+    {
+        return $this->repository->delete($id);
     }
 }
