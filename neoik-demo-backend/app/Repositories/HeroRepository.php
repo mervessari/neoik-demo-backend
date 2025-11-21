@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-
 use App\Models\Hero;
 
 class HeroRepository
@@ -12,9 +11,18 @@ class HeroRepository
         return Hero::all();
     }
 
-    public function find($id)
+    // FIND NULLABLE
+    public function findNullable($id)
     {
-        return Hero::findOrFail($id);
+        return Hero::find($id);
+    }
+
+    // EXISTS BADGE (unique control)
+    public function existsBadge($badge)
+    {
+        if (!$badge) return false;
+
+        return Hero::where('badge', $badge)->exists();
     }
 
     public function create(array $data)
@@ -24,14 +32,18 @@ class HeroRepository
 
     public function update($id, array $data)
     {
-        $hero = Hero::findOrFail($id);
+        $hero = Hero::find($id);
+        if (!$hero) return null;
+
         $hero->update($data);
         return $hero;
     }
 
     public function delete($id)
     {
-        $hero = Hero::findOrFail($id);
+        $hero = Hero::find($id);
+        if (!$hero) return false;
+
         $hero->delete();
         return true;
     }

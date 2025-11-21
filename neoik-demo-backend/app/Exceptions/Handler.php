@@ -3,42 +3,42 @@
 namespace App\Exceptions;
 
 use Throwable;
+use App\Helpers\ApiResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\ValidationException as LaravelValidationException;
 
 class Handler extends ExceptionHandler
 {
-    /**
-     * Register the exception handling callbacks.
-     */
     public function register(): void
     {
-        // Validation Exception → JSON format
-        $this->renderable(function (ValidationException $e, $request) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+        // Laravel validation hataları
+        $this->renderable(function (LaravelValidationException $e, $request) {
+            return ApiResponse::validation(
+                $e->errors(),
+                'Validasyon hatası',
+                422
+            );
         });
-
-        // Custom BaseException
+        // Özel BaseException hataları
         $this->renderable(function (BaseException $e, $request) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-                'code' => $e->getCode(),
-            ], $e->getHttpStatus());
+            return ApiResponse::error(
+                $e->getMessage(),
+                $e->getStatus(),
+                $e->getErrors(),
+                $e->getMeta()
+            );
         });
 
-        // Fallback – Other exceptions (unexpected)
+        // Beklenmeyen tüm diğer hatalar
         $this->renderable(function (Throwable $e, $request) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Something went wrong!',
-                'exception' => class_basename($e),
-            ], 500);
+            return ApiResponse::error(
+                'Beklenmeyen bir hata oluştu.',
+                500,
+                [
+                    'exception' => class_basename($e),
+                    'message'   => $e->getMessage(),
+                ]
+            );
         });
     }
 }

@@ -11,9 +11,9 @@ class TestimonialsRepository
         return Testimonial::all();
     }
 
-    public function find($id)
+    public function findNullable($id)
     {
-        return Testimonial::findOrFail($id);
+        return Testimonial::find($id);
     }
 
     public function create(array $data)
@@ -23,15 +23,19 @@ class TestimonialsRepository
 
     public function update($id, array $data)
     {
-        $testimonial = Testimonial::findOrFail($id);
-        $testimonial->update($data);
-        return $testimonial;
+        $item = Testimonial::find($id);
+        if (!$item) return null;
+
+        $item->update($data);
+        return $item;
     }
 
     public function delete($id)
     {
-        $testimonial = Testimonial::findOrFail($id);
-        $testimonial->delete();
+        $item = Testimonial::find($id);
+        if (!$item) return false;
+
+        $item->delete();
         return true;
     }
 }

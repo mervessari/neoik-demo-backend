@@ -10,10 +10,24 @@ class HrSolutionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'badge' => $this->badge,
-            'title' => $this->title,
-            'subtitle' => $this->subtitle,
-            // Diğer alanlar
+
+            'data' => [
+                'badge'    => $this->badge,
+                'title'    => $this->title ? ucfirst($this->title) : null,
+                'subtitle' => $this->subtitle,
+                'personnel'  => $this->personnel,
+                'financial'  => $this->financial,
+                'leave'      => $this->leave,
+                'document'   => $this->document,
+                'inventory'  => $this->inventory,
+                'performance'=> $this->performance,
+                'cta'        => $this->cta,
+            ],
+
+            'meta' => [
+                'created_at' => $this->created_at?->format('d.m.Y H:i'),
+                'updated_at' => $this->updated_at?->format('d.m.Y H:i'),
+            ]
         ];
     }
 }

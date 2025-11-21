@@ -3,48 +3,51 @@
 namespace App\Services;
 
 use App\Repositories\HrSolutionsRepository;
+use App\Exceptions\NotFoundException;
 
 class HrSolutionsService
 {
-    protected HrSolutionsRepository $repository;
+    public function __construct(
+        protected HrSolutionsRepository $repository
+    ) {}
 
-    public function __construct(HrSolutionsRepository $repository)
+    private function getOrFail($id)
     {
-        $this->repository = $repository;
-    }
+        $item = $this->repository->findNullable($id);
 
-    public function getHrSolutions($filter = null)
-    {
-        $items = $this->repository->all();
-        if ($filter) {
-            $items = $items->where('badge', $filter);
+        if (! $item) {
+            throw new NotFoundException("HR Solution #{$id} bulunamadı.");
         }
-        $items->transform(function ($item) {
-            $item->title = ucfirst($item->title);
-            return $item;
-        });
-        return $items;
+
+        return $item;
     }
 
-    public function getHrSolution($id)
+    public function list()
     {
-        return $this->repository->find($id);
+        return $this->repository->all();
     }
 
-    public function createHrSolution($data)
+    public function find($id)
     {
-        // İş mantığı: veri doğrulama
+        return $this->getOrFail($id);
+    }
+
+    public function create(array $data)
+    {
         return $this->repository->create($data);
     }
 
-    public function updateHrSolution($id, $data)
+    public function update($id, array $data)
     {
-        // İş mantığı: veri işleme
+        $this->getOrFail($id);
+
         return $this->repository->update($id, $data);
     }
 
-    public function deleteHrSolution($id)
+    public function delete($id)
     {
+        $this->getOrFail($id);
+
         return $this->repository->delete($id);
     }
 }

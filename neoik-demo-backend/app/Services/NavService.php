@@ -3,46 +3,51 @@
 namespace App\Services;
 
 use App\Repositories\NavRepository;
+use App\Exceptions\NotFoundException;
 
 class NavService
 {
-    protected NavRepository $repository;
+    public function __construct(
+        protected NavRepository $repository
+    ) {}
 
-    public function __construct(NavRepository $repository)
+    private function getOrFail($id)
     {
-        $this->repository = $repository;
-    }
+        $item = $this->repository->findNullable($id);
 
-    public function getNavs($filter = null)
-    {
-        $items = $this->repository->all();
-        if ($filter) {
-            $items = $items->where('clients', $filter);
+        if (! $item) {
+            throw new NotFoundException("Nav #{$id} bulunamadı.");
         }
-        $items->transform(function ($item) {
-            $item->contact = strtoupper($item->contact);
-            return $item;
-        });
-        return $items;
+
+        return $item;
     }
 
-    public function getNav($id)
+    public function list()
     {
-        return $this->repository->find($id);
+        return $this->repository->all();
     }
 
-    public function createNav($data)
+    public function find($id)
+    {
+        return $this->getOrFail($id);
+    }
+
+    public function create(array $data)
     {
         return $this->repository->create($data);
     }
 
-    public function updateNav($id, $data)
+    public function update($id, array $data)
     {
+        $this->getOrFail($id);
+
         return $this->repository->update($id, $data);
     }
 
-    public function deleteNav($id)
+    public function delete($id)
     {
+        $this->getOrFail($id);
+
         return $this->repository->delete($id);
     }
 }

@@ -6,14 +6,14 @@ use App\Models\Nav;
 
 class NavRepository
 {
+
     public function all()
     {
         return Nav::all();
     }
-
-    public function find($id)
+    public function findNullable($id)
     {
-        return Nav::findOrFail($id);
+        return Nav::find($id);
     }
 
     public function create(array $data)
@@ -23,15 +23,19 @@ class NavRepository
 
     public function update($id, array $data)
     {
-        $nav = Nav::findOrFail($id);
-        $nav->update($data);
-        return $nav;
+        $item = Nav::find($id);
+        if (!$item) return null;
+
+        $item->update($data);
+        return $item;
     }
 
     public function delete($id)
     {
-        $nav = Nav::findOrFail($id);
-        $nav->delete();
+        $item = Nav::find($id);
+        if (!$item) return false;
+
+        $item->delete();
         return true;
     }
 }

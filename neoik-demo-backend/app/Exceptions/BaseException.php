@@ -3,50 +3,37 @@
 namespace App\Exceptions;
 
 use Exception;
-use App\Helpers\ApiResponse;
 
 class BaseException extends Exception
 {
-    protected $status;
-    protected $errorCode;
-    protected $errors;
-    protected $meta;
+    protected int $status;
+    protected mixed $errors;
+    protected mixed $meta;
 
-    public function __construct($message = "", $status = 400, $errorCode = null, $errors = null, $meta = null)
-    {
+    public function __construct(
+        string $message = '',
+        int $status = 400,
+        mixed $errors = null,
+        mixed $meta = null
+    ) {
         parent::__construct($message);
+
         $this->status = $status;
-        $this->errorCode = $errorCode;
         $this->errors = $errors;
         $this->meta = $meta;
     }
 
-    public function render()
-    {
-        return ApiResponse::error(
-            $this->getMessage(),
-            $this->status,
-            $this->errors,
-            $this->meta
-        );
-    }
-
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }
 
-    public function getErrorCode()
-    {
-        return $this->errorCode;
-    }
-
-    public function getErrors()
+    public function getErrors(): mixed
     {
         return $this->errors;
     }
 
-    public function getMeta()
+    public function getMeta(): mixed
     {
         return $this->meta;
     }

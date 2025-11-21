@@ -3,46 +3,51 @@
 namespace App\Services;
 
 use App\Repositories\TestimonialsRepository;
+use App\Exceptions\NotFoundException;
 
 class TestimonialsService
 {
-    protected TestimonialsRepository $repository;
+    public function __construct(
+        protected TestimonialsRepository $repository
+    ) {}
 
-    public function __construct(TestimonialsRepository $repository)
+    private function getOrFail($id)
     {
-        $this->repository = $repository;
-    }
+        $item = $this->repository->findNullable($id);
 
-    public function getTestimonials($filter = null)
-    {
-        $items = $this->repository->all();
-        if ($filter) {
-            $items = $items->where('badge', $filter);
+        if (! $item) {
+            throw new NotFoundException("Testimonial #{$id} bulunamadı.");
         }
-        $items->transform(function ($item) {
-            $item->title = ucfirst($item->title);
-            return $item;
-        });
-        return $items;
+
+        return $item;
     }
 
-    public function getTestimonial($id)
+    public function list()
     {
-        return $this->repository->find($id);
+        return $this->repository->all();
     }
 
-    public function createTestimonial($data)
+    public function find($id)
+    {
+        return $this->getOrFail($id);
+    }
+
+    public function create(array $data)
     {
         return $this->repository->create($data);
     }
 
-    public function updateTestimonial($id, $data)
+    public function update($id, array $data)
     {
+        $this->getOrFail($id);
+
         return $this->repository->update($id, $data);
     }
 
-    public function deleteTestimonial($id)
+    public function delete($id)
     {
+        $this->getOrFail($id);
+
         return $this->repository->delete($id);
     }
 }

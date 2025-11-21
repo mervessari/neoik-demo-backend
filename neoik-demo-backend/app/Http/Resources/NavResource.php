@@ -10,10 +10,18 @@ class NavResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'hr_solutions' => $this->hr_solutions,
-            'industry_solutions' => $this->industry_solutions,
-            'clients' => $this->clients,
-            'contact' => $this->contact,
+
+            'data' => [
+                'hr_solutions'       => $this->hr_solutions,
+                'industry_solutions' => $this->industry_solutions,
+                'clients'            => $this->clients,
+                'contact'            => $this->contact ? strtoupper($this->contact) : null,
+            ],
+
+            'meta' => [
+                'created_at' => $this->created_at?->format('d.m.Y H:i'),
+                'updated_at' => $this->updated_at?->format('d.m.Y H:i'),
+            ]
         ];
     }
 }

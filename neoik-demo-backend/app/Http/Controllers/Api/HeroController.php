@@ -3,52 +3,64 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-
-use App\Repositories\HeroRepository;
 use App\Helpers\ApiResponse;
 use App\Http\Resources\HeroResource;
-use App\Http\Resources\HeroCollection;
-
-use Illuminate\Http\Request;
-
+use App\Services\HeroService;
+use App\Http\Requests\Hero\HeroStoreRequest;
+use App\Http\Requests\Hero\HeroUpdateRequest;
 
 class HeroController extends Controller
 {
-    protected HeroService $service;
+    public function __construct(
+        protected HeroService $service
+    ) {}
 
-    public function __construct(HeroService $service)
+    public function index()
     {
-        $this->service = $service;
-    }
-
-    public function index(Request $request)
-    {
-        $filter = $request->get('badge');
-        $heroes = $this->service->getHeroes($filter);
-        return ApiResponse::success(new HeroCollection($heroes));
+        $items = $this->service->list(request('badge'));
+        return ApiResponse::success(
+            HeroResource::collection($items)
+        );
     }
 
     public function show($id)
     {
-        $hero = $this->service->getHero($id);
-        return ApiResponse::success(new HeroResource($hero));
+        $item = $this->service->find($id);
+        return ApiResponse::success(
+            new HeroResource($item)
+        );
     }
 
-    public function store(Request $request)
+    public function store(HeroStoreRequest $request)
     {
-        $hero = $this->service->createHero($request->all());
-        return ApiResponse::success(new HeroResource($hero), 'Hero created', 201);
+        $item = $this->service->create(
+            $request->validated()
+        );
+
+        return ApiResponse::success(
+            new HeroResource($item),
+            'Created',
+            201
+        );
     }
 
-    public function update(Request $request, $id)
+    public function update(HeroUpdateRequest $request, $id)
     {
-        $hero = $this->service->updateHero($id, $request->all());
-        return ApiResponse::success(new HeroResource($hero), 'Hero updated');
+        $item = $this->service->update(
+            $id,
+            $request->validated()
+        );
+
+        return ApiResponse::success(
+            new HeroResource($item),
+            'Updated'
+        );
     }
 
     public function destroy($id)
     {
-        $this->service->deleteHero($id);
-        return ApiResponse::success(null, 'Hero deleted');
+        $this->service->delete($id);
+
+        return ApiResponse::success(null, 'Deleted');
     }
 }

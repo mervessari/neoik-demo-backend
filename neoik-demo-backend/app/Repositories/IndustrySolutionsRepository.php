@@ -6,14 +6,17 @@ use App\Models\IndustrySolution;
 
 class IndustrySolutionsRepository
 {
+
     public function all()
     {
         return IndustrySolution::all();
     }
 
-    public function find($id)
+  
+
+    public function findNullable($id)
     {
-        return IndustrySolution::findOrFail($id);
+        return IndustrySolution::find($id);
     }
 
     public function create(array $data)
@@ -23,15 +26,19 @@ class IndustrySolutionsRepository
 
     public function update($id, array $data)
     {
-        $industrySolution = IndustrySolution::findOrFail($id);
-        $industrySolution->update($data);
-        return $industrySolution;
+        $item = IndustrySolution::find($id);
+        if (!$item) return null;
+
+        $item->update($data);
+        return $item;
     }
 
     public function delete($id)
     {
-        $industrySolution = IndustrySolution::findOrFail($id);
-        $industrySolution->delete();
+        $item = IndustrySolution::find($id);
+        if (!$item) return false;
+
+        $item->delete();
         return true;
     }
 }

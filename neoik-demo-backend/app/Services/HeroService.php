@@ -3,50 +3,62 @@
 namespace App\Services;
 
 use App\Repositories\HeroRepository;
+use App\Exceptions\NotFoundException;
+use App\Exceptions\ConflictException;
 
 class HeroService
 {
-    protected HeroRepository $repository;
+    public function __construct(
+        protected HeroRepository $repository
+    ) {}
 
-    public function __construct(HeroRepository $repository)
+    private function getOrFail($id)
     {
-        $this->repository = $repository;
-    }
+        $item = $this->repository->findNullable($id);
 
-    public function getHeroes($filter = null)
-    {
-        $heroes = $this->repository->all();
-        if ($filter) {
-            $heroes = $heroes->where('badge', $filter);
+        if (! $item) {
+            throw new NotFoundException("Hero #{$id} bulunamadı.");
         }
-        $heroes->transform(function ($item) {
-            $item->title = ucfirst($item->title);
-            return $item;
-        });
-        return $heroes;
+
+        return $item;
     }
 
-    public function getHero($id)
+    public function list()
     {
-        return $this->repository->find($id);
+        return $this->repository->all();
     }
 
-    public function createHero($data)
+    public function find($id)
     {
-        // Örnek iş mantığı: veri doğrulama
-        // ...
+        return $this->getOrFail($id);
+    }
+
+    public function create(array $data)
+    {
+        if (!empty($data['badge']) && $this->repository->existsBadge($data['badge'])) {
+            throw new ConflictException("Bu badge zaten kullanılıyor.");
+        }
+
         return $this->repository->create($data);
     }
 
-    public function updateHero($id, $data)
+    public function update($id, array $data)
     {
-        // Örnek iş mantığı: veri işleme
-        // ...
+        $hero = $this->getOrFail($id);
+
+        if (!empty($data['badge']) && $data['badge'] !== $hero->badge) {
+            if ($this->repository->existsBadge($data['badge'])) {
+                throw new ConflictException("Bu badge başka bir hero tarafından kullanılıyor.");
+            }
+        }
+
         return $this->repository->update($id, $data);
     }
 
-    public function deleteHero($id)
+    public function delete($id)
     {
+        $this->getOrFail($id);
+
         return $this->repository->delete($id);
     }
 }

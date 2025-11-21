@@ -10,10 +10,20 @@ class IndustrySolutionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'badge' => $this->badge,
-            'title' => $this->title,
-            'subtitle' => $this->subtitle,
-            // Diğer alanlar
+
+            'data' => [
+                'badge'    => $this->badge,
+                'title'    => $this->title ? strtoupper($this->title) : null,
+                'subtitle' => $this->subtitle,
+                'manufacturing' => $this->manufacturing,
+                'healthcare'    => $this->healthcare,
+                'retail'        => $this->retail,
+            ],
+
+            'meta' => [
+                'created_at' => $this->created_at?->format('d.m.Y H:i'),
+                'updated_at' => $this->updated_at?->format('d.m.Y H:i'),
+            ]
         ];
     }
 }

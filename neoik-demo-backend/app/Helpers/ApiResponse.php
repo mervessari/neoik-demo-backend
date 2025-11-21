@@ -4,40 +4,45 @@ namespace App\Helpers;
 
 use Illuminate\Http\JsonResponse;
 
-
 class ApiResponse
 {
-    private static function build(bool $success, $message, $code, $data = null, $errors = null, $meta = null): JsonResponse
+    private static function send(bool $success, int $status, $data = null, $message = null, $errors = null, $meta = null): JsonResponse
     {
-        $response = [
+        $payload = [
             'success' => $success,
-            'code' => $code,
-            'message' => $message,
         ];
-        if (!is_null($data)) {
-            $response['data'] = $data;
+
+        if ($message !== null) {
+            $payload['message'] = $message;
         }
-        if (!is_null($errors)) {
-            $response['errors'] = $errors;
+
+        if ($data !== null) {
+            $payload['data'] = $data;
         }
-        if (!is_null($meta)) {
-            $response['meta'] = $meta;
+
+        if ($errors !== null) {
+            $payload['errors'] = $errors;
         }
-        return response()->json($response, $code);
+
+        if ($meta !== null) {
+            $payload['meta'] = $meta;
+        }
+
+        return response()->json($payload, $status);
     }
 
-    public static function success($data = null, $message = 'Success', $code = 200, $meta = null): JsonResponse
+    public static function success($data = null, ?string $message = null, int $status = 200, $meta = null): JsonResponse
     {
-        return self::build(true, $message, $code, $data, null, $meta);
+        return self::send(true, $status, $data, $message, null, $meta);
     }
 
-    public static function error($message = 'Error', $code = 400, $errors = null, $meta = null): JsonResponse
+    public static function error(?string $message, int $status = 400, $errors = null, $meta = null): JsonResponse
     {
-        return self::build(false, $message, $code, null, $errors, $meta);
+        return self::send(false, $status, null, $message, $errors, $meta);
     }
 
-    public static function validation($errors, $message = 'Validation Error', $code = 422, $meta = null): JsonResponse
+    public static function validation($errors, ?string $message = 'Error Validation', int $status = 422, $meta = null): JsonResponse
     {
-        return self::build(false, $message, $code, null, $errors, $meta);
+        return self::send(false, $status, null, $message, $errors, $meta);
     }
 }

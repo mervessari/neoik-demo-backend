@@ -11,9 +11,10 @@ class HrSolutionsRepository
         return HrSolution::all();
     }
 
-    public function find($id)
+
+    public function findNullable($id)
     {
-        return HrSolution::findOrFail($id);
+        return HrSolution::find($id);
     }
 
     public function create(array $data)
@@ -23,15 +24,19 @@ class HrSolutionsRepository
 
     public function update($id, array $data)
     {
-        $hrSolution = HrSolution::findOrFail($id);
-        $hrSolution->update($data);
-        return $hrSolution;
+        $item = HrSolution::find($id);
+        if (!$item) return null;
+
+        $item->update($data);
+        return $item;
     }
 
     public function delete($id)
     {
-        $hrSolution = HrSolution::findOrFail($id);
-        $hrSolution->delete();
+        $item = HrSolution::find($id);
+        if (!$item) return false;
+
+        $item->delete();
         return true;
     }
 }

@@ -3,47 +3,51 @@
 namespace App\Services;
 
 use App\Repositories\IndustrySolutionsRepository;
+use App\Exceptions\NotFoundException;
 
 class IndustrySolutionsService
 {
-    protected IndustrySolutionsRepository $repository;
+    public function __construct(
+        protected IndustrySolutionsRepository $repository
+    ) {}
 
-    public function __construct(IndustrySolutionsRepository $repository)
+    private function getOrFail($id)
     {
-        $this->repository = $repository;
-    }
+        $item = $this->repository->findNullable($id);
 
-    public function getIndustrySolutions($filter = null)
-    {
-        $solutions = $this->repository->all();
-        if ($filter) {
-            $solutions = $solutions->where('badge', $filter);
+        if (! $item) {
+            throw new NotFoundException("Industry Solution #{$id} bulunamadı.");
         }
-        $solutions->transform(function ($item) {
-            $item->title = strtoupper($item->title);
-            return $item;
-        });
-        return $solutions;
+
+        return $item;
     }
 
-    public function getIndustrySolution($id)
+    public function list()
     {
-        return $this->repository->find($id);
+        return $this->repository->all();
     }
 
-    public function createIndustrySolution($data)
+    public function find($id)
     {
-        // İş mantığı: validasyon vs. eklenebilir
+        return $this->getOrFail($id);
+    }
+
+    public function create(array $data)
+    {
         return $this->repository->create($data);
     }
 
-    public function updateIndustrySolution($id, $data)
+    public function update($id, array $data)
     {
+        $this->getOrFail($id);
+
         return $this->repository->update($id, $data);
     }
 
-    public function deleteIndustrySolution($id)
+    public function delete($id)
     {
+        $this->getOrFail($id);
+
         return $this->repository->delete($id);
     }
 }
