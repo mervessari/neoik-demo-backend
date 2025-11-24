@@ -11,27 +11,23 @@ use App\Http\Requests\Testimonial\TestimonialUpdateRequest;
 
 class TestimonialsController extends Controller
 {
+    use ApiResponse;
+
     public function __construct(
         protected TestimonialsService $service
     ) {}
 
     public function index()
     {
-        $items = $this->service->list(request('badge'));
-
-        public function index(TestimonialStoreRequest $request)
-        {
-            $badge = $request->validated()['badge'] ?? null;
-            $items = $this->service->list($badge);
-            return $this->success(
-                TestimonialResource::collection($items)
-            );
-        }
+        $items = $this->service->list();
+        return $this->success(
+            TestimonialResource::collection($items)
+        );
+    }
 
     public function show($id)
     {
         $item = $this->service->find($id);
-
         return $this->success(
             new TestimonialResource($item)
         );
@@ -39,10 +35,7 @@ class TestimonialsController extends Controller
 
     public function store(TestimonialStoreRequest $request)
     {
-        $item = $this->service->create(
-            $request->validated()
-        );
-
+        $item = $this->service->create($request->validated());
         return $this->success(
             new TestimonialResource($item),
             'Created',
@@ -52,11 +45,7 @@ class TestimonialsController extends Controller
 
     public function update(TestimonialUpdateRequest $request, $id)
     {
-        $item = $this->service->update(
-            $id,
-            $request->validated()
-        );
-
+        $item = $this->service->update($id, $request->validated());
         return $this->success(
             new TestimonialResource($item),
             'Updated'
@@ -66,7 +55,6 @@ class TestimonialsController extends Controller
     public function destroy($id)
     {
         $this->service->delete($id);
-
         return $this->success(null, 'Deleted');
     }
 }

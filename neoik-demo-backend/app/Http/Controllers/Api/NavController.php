@@ -11,26 +11,20 @@ use App\Http\Requests\Nav\NavUpdateRequest;
 
 class NavController extends Controller
 {
+    use ApiResponse;
+
     public function __construct(
         protected NavService $service
     ) {}
 
     public function index()
     {
-        $items = $this->service->list(request('clients'));
+        $items = $this->service->list();
 
         return $this->success(
             NavResource::collection($items)
         );
     }
-        public function index(NavStoreRequest $request)
-        {
-            $badge = $request->validated()['badge'] ?? null;
-            $items = $this->service->list($badge);
-            return $this->success(
-                NavResource::collection($items)
-            );
-        }
 
     public function show($id)
     {
