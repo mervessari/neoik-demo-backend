@@ -19,16 +19,16 @@ class TestimonialsController extends Controller
     {
         $items = $this->service->list(request('badge'));
 
-        return ApiResponse::success(
-            TestimonialResource::collection($items)
-        );
+            return $this->success(
+                TestimonialResource::collection($items)
+            );
     }
 
     public function show($id)
     {
         $item = $this->service->find($id);
 
-        return ApiResponse::success(
+        return $this->success(
             new TestimonialResource($item)
         );
     }
@@ -39,7 +39,7 @@ class TestimonialsController extends Controller
             $request->validated()
         );
 
-        return ApiResponse::success(
+        return $this->success(
             new TestimonialResource($item),
             'Created',
             201
@@ -53,7 +53,7 @@ class TestimonialsController extends Controller
             $request->validated()
         );
 
-        return ApiResponse::success(
+        return $this->success(
             new TestimonialResource($item),
             'Updated'
         );
@@ -63,6 +63,6 @@ class TestimonialsController extends Controller
     {
         $this->service->delete($id);
 
-        return ApiResponse::success(null, 'Deleted');
+        return $this->success(null, 'Deleted');
     }
 }
