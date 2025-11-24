@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Helpers\ApiResponse;
+use App\Traits\ApiResponse;
 use App\Http\Resources\NavResource;
 use App\Services\NavService;
 use App\Http\Requests\Nav\NavStoreRequest;
@@ -19,16 +19,24 @@ class NavController extends Controller
     {
         $items = $this->service->list(request('clients'));
 
-        return ApiResponse::success(
+        return $this->success(
             NavResource::collection($items)
         );
     }
+        public function index(NavStoreRequest $request)
+        {
+            $badge = $request->validated()['badge'] ?? null;
+            $items = $this->service->list($badge);
+            return $this->success(
+                NavResource::collection($items)
+            );
+        }
 
     public function show($id)
     {
         $item = $this->service->find($id);
 
-        return ApiResponse::success(
+        return $this->success(
             new NavResource($item)
         );
     }
@@ -39,7 +47,7 @@ class NavController extends Controller
             $request->validated()
         );
 
-        return ApiResponse::success(
+        return $this->success(
             new NavResource($item),
             'Created',
             201
@@ -53,7 +61,7 @@ class NavController extends Controller
             $request->validated()
         );
 
-        return ApiResponse::success(
+        return $this->success(
             new NavResource($item),
             'Updated'
         );
@@ -63,6 +71,6 @@ class NavController extends Controller
     {
         $this->service->delete($id);
 
-        return ApiResponse::success(null, 'Deleted');
+        return $this->success(null, 'Deleted');
     }
 }

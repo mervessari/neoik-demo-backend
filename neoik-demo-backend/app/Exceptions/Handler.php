@@ -3,7 +3,7 @@
 namespace App\Exceptions;
 
 use Throwable;
-use App\Helpers\ApiResponse;
+use App\Traits\ApiResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException as LaravelValidationException;
 

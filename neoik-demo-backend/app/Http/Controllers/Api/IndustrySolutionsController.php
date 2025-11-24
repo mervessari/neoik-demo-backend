@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Helpers\ApiResponse;
+use App\Traits\ApiResponse;
 use App\Http\Resources\IndustrySolutionResource;
 use App\Services\IndustrySolutionsService;
 use App\Http\Requests\Industry\IndustrySolutionStoreRequest;
@@ -16,11 +16,11 @@ class IndustrySolutionsController extends Controller
         protected IndustrySolutionsService $service
     ) {}
 
-    public function index()
+    public function index(IndustrySolutionStoreRequest $request)
     {
-        $items = $this->service->list();
-
-        return ApiResponse::success(
+        $badge = $request->validated()['badge'] ?? null;
+        $items = $this->service->list($badge);
+        return $this->success(
             IndustrySolutionResource::collection($items)
         );
     }
@@ -29,7 +29,7 @@ class IndustrySolutionsController extends Controller
     {
         $item = $this->service->find($id);
 
-        return ApiResponse::success(
+        return $this->success(
             new IndustrySolutionResource($item)
         );
     }
@@ -40,7 +40,7 @@ class IndustrySolutionsController extends Controller
             $request->validated()
         );
 
-        return ApiResponse::success(
+        return $this->success(
             new IndustrySolutionResource($item),
             'Created',
             201
@@ -54,7 +54,7 @@ class IndustrySolutionsController extends Controller
             $request->validated()
         );
 
-        return ApiResponse::success(
+        return $this->success(
             new IndustrySolutionResource($item),
             'Updated'
         );
@@ -64,6 +64,6 @@ class IndustrySolutionsController extends Controller
     {
         $this->service->delete($id);
 
-        return ApiResponse::success(null, 'Deleted');
+        return $this->success(null, 'Deleted');
     }
 }
