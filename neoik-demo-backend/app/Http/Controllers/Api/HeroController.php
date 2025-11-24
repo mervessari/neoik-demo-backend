@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Helpers\ApiResponse;
+use App\Traits\ApiResponse;
 use App\Http\Resources\HeroResource;
 use App\Services\HeroService;
 use App\Http\Requests\Hero\HeroStoreRequest;
 use App\Http\Requests\Hero\HeroUpdateRequest;
+use App\Http\Requests\Hero\HeroStoreRequest;
 
 class HeroController extends Controller
 {
@@ -15,10 +16,11 @@ class HeroController extends Controller
         protected HeroService $service
     ) {}
 
-    public function index()
+    public function index(HeroStoreRequest $request)
     {
-        $items = $this->service->list(request('badge'));
-        return ApiResponse::success(
+        $badge = $request->validated()['badge'] ?? null;
+        $items = $this->service->list($badge);
+        return $this->success(
             HeroResource::collection($items)
         );
     }
@@ -26,7 +28,7 @@ class HeroController extends Controller
     public function show($id)
     {
         $item = $this->service->find($id);
-        return ApiResponse::success(
+        return $this->success(
             new HeroResource($item)
         );
     }
@@ -37,7 +39,7 @@ class HeroController extends Controller
             $request->validated()
         );
 
-        return ApiResponse::success(
+        return $this->success(
             new HeroResource($item),
             'Created',
             201
@@ -51,7 +53,7 @@ class HeroController extends Controller
             $request->validated()
         );
 
-        return ApiResponse::success(
+        return $this->success(
             new HeroResource($item),
             'Updated'
         );
@@ -61,6 +63,6 @@ class HeroController extends Controller
     {
         $this->service->delete($id);
 
-        return ApiResponse::success(null, 'Deleted');
+        return $this->success(null, 'Deleted');
     }
 }

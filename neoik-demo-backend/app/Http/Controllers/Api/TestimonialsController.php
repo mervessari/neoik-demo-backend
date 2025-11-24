@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Helpers\ApiResponse;
+use App\Traits\ApiResponse;
 use App\Http\Resources\TestimonialResource;
 use App\Services\TestimonialsService;
 use App\Http\Requests\Testimonial\TestimonialStoreRequest;
@@ -19,10 +19,14 @@ class TestimonialsController extends Controller
     {
         $items = $this->service->list(request('badge'));
 
+        public function index(TestimonialStoreRequest $request)
+        {
+            $badge = $request->validated()['badge'] ?? null;
+            $items = $this->service->list($badge);
             return $this->success(
                 TestimonialResource::collection($items)
             );
-    }
+        }
 
     public function show($id)
     {
