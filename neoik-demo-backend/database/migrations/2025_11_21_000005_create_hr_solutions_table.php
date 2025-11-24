@@ -8,16 +8,16 @@ return new class extends Migration {
     {
         Schema::create('hr_solutions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('badge')->nullable();
-            $table->string('subtitle')->nullable();
-            $table->string('personnel')->nullable();
-            $table->string('financial')->nullable();
-            $table->string('leave')->nullable();
-            $table->string('document')->nullable();
-            $table->string('inventory')->nullable();
-            $table->string('performance')->nullable();
-            $table->string('cta')->nullable();
+            $table->json('title')->nullable();
+            $table->json('badge')->nullable();
+            $table->json('subtitle')->nullable();
+            $table->json('personnel')->nullable();
+            $table->json('financial')->nullable();
+            $table->json('leave')->nullable();
+            $table->json('document')->nullable();
+            $table->json('inventory')->nullable();
+            $table->json('performance')->nullable();
+            $table->json('cta')->nullable();
             $table->timestamps();
         });
     }

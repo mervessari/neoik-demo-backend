@@ -1,20 +1,20 @@
 <?php
 
 namespace App\Http\Requests\Testimonial;
-use Illuminate\Foundation\Http\FormRequest;
 
-class TestimonialStoreRequest extends FormRequest
+use App\Http\Requests\BaseFormRequest;
+class TestimonialStoreRequest extends BaseFormRequest
 {
     public function rules(): array
     {
-        return [
-            'badge'        => ['nullable', 'string', 'max:255'],
-            'title'        => ['required', 'string', 'max:255'],
-            'subtitle'     => ['nullable', 'string', 'max:500'],
-            'cta'          => ['nullable', 'string', 'max:255'],
-            'mehmet'       => ['nullable', 'string'],
-            'semih'        => ['nullable', 'string'],
-            'abdurrahman'  => ['nullable', 'string'],
-        ];
+        return array_merge(
+            $this->translatableRules('badge'),
+            $this->translatableRules('title'),
+            $this->translatableRules('subtitle'),
+            $this->translatableRules('cta'),
+            $this->translatableRules('mehmet'),
+            $this->translatableRules('semih'),
+            $this->translatableRules('abdurrahman')
+        );
     }
 }

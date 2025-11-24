@@ -8,13 +8,13 @@ return new class extends Migration {
     {
         Schema::create('testimonials', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('badge')->nullable();
-            $table->string('subtitle')->nullable();
-            $table->string('cta')->nullable();
-            $table->text('mehmet')->nullable();
-            $table->text('semih')->nullable();
-            $table->text('abdurrahman')->nullable();
+            $table->json('title')->nullable();
+            $table->json('badge')->nullable();
+            $table->json('subtitle')->nullable();
+            $table->json('cta')->nullable();
+            $table->json('mehmet')->nullable();
+            $table->json('semih')->nullable();
+            $table->json('abdurrahman')->nullable();
             $table->timestamps();
         });
     }

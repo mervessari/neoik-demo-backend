@@ -8,10 +8,10 @@ return new class extends Migration {
     {
         Schema::create('navs', function (Blueprint $table) {
             $table->id();
-            $table->string('hr_solutions')->nullable();
-            $table->string('industry_solutions')->nullable();
-            $table->string('clients')->nullable();
-            $table->string('contact')->nullable();
+                $table->json('hr_solutions')->nullable();
+                $table->json('industry_solutions')->nullable();
+                $table->json('clients')->nullable();
+                $table->json('contact')->nullable();
             $table->timestamps();
         });
     }
