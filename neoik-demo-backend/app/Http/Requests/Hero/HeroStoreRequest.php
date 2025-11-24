@@ -2,20 +2,21 @@
 
 namespace App\Http\Requests\Hero;
 
+use App\Http\Requests\BaseFormRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class HeroStoreRequest extends FormRequest
+class HeroStoreRequest extends BaseFormRequest
 
 {
     public function rules(): array
     {
-        return [
-            'badge'           => ['nullable', 'string', 'max:255'],
-            'title'           => ['required', 'string', 'max:255'],
-            'title_highlight' => ['nullable', 'string', 'max:255'],
-            'subtitle'        => ['nullable', 'string', 'max:500'],
-            'button_text'     => ['nullable', 'string', 'max:255'],
-            'trusted_by'      => ['nullable', 'string', 'max:255'],
-        ];
+        return array_merge(
+            $this->translatableRules('badge'),
+            $this->translatableRules('title'),
+            $this->translatableRules('title_highlight'),
+            $this->translatableRules('subtitle'),
+            $this->translatableRules('button_text'),
+            $this->translatableRules('trusted_by')
+        );
     }
 }

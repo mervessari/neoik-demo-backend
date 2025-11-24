@@ -8,13 +8,12 @@ return new class extends Migration {
     {
         Schema::create('heroes', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('badge')->nullable();
-            $table->string('title')->nullable();
-            $table->string('title_highlight')->nullable();
-            $table->string('subtitle')->nullable();
-            $table->string('button_text')->nullable();
-            $table->string('trusted_by')->nullable();
+            $table->json('badge')->nullable();
+            $table->json('title')->nullable();
+            $table->json('title_highlight')->nullable();
+            $table->json('subtitle')->nullable();
+            $table->json('button_text')->nullable();
+            $table->json('trusted_by')->nullable();
             $table->timestamps();
         });
     }

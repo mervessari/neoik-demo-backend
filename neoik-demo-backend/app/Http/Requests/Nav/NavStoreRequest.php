@@ -2,17 +2,17 @@
 
 namespace App\Http\Requests\Nav;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseFormRequest;
 
-class NavStoreRequest extends FormRequest
+class NavStoreRequest extends BaseFormRequest
 {
     public function rules(): array
     {
-        return [
-            'hr_solutions'       => ['nullable', 'string', 'max:255'],
-            'industry_solutions' => ['nullable', 'string', 'max:255'],
-            'clients'            => ['nullable', 'string', 'max:255'],
-            'contact'            => ['nullable', 'string', 'max:255'],
-        ];
+        return array_merge(
+            $this->translatableRules('hr_solutions'),
+            $this->translatableRules('industry_solutions'),
+            $this->translatableRules('clients'),
+            $this->translatableRules('contact')
+        );
     }
 }

@@ -1,20 +1,23 @@
 <?php
 
 namespace App\Http\Requests\Testimonial;
+
+use App\Http\Requests\BaseFormRequest;
+use Faker\Provider\Base;
 use Illuminate\Foundation\Http\FormRequest;
 
-class TestimonialUpdateRequest extends FormRequest
+class TestimonialUpdateRequest extends BaseFormRequest
 {
     public function rules(): array
     {
-        return [
-            'badge'        => ['sometimes', 'string', 'max:255'],
-            'title'        => ['sometimes', 'string', 'max:255'],
-            'subtitle'     => ['sometimes', 'string', 'max:500'],
-            'cta'          => ['sometimes', 'string', 'max:255'],
-            'mehmet'       => ['sometimes', 'string'],
-            'semih'        => ['sometimes', 'string'],
-            'abdurrahman'  => ['sometimes', 'string'],
-        ];
+        return array_merge(
+            $this->translatableRules('badge'),
+            $this->translatableRules('title'),
+            $this->translatableRules('subtitle'),
+            $this->translatableRules('cta'),
+            $this->translatableRules('mehmet'),
+            $this->translatableRules('semih'),
+            $this->translatableRules('abdurrahman')
+        );
     }
 }

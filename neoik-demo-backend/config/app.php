@@ -12,8 +12,9 @@ return [
     | other UI elements where an application name needs to be displayed.
     |
     */
+    'languages' => ['en', 'tr'],
+    'locale' => env('APP_LOCALE', 'en'),
 
-    'languages' => explode(',', env('APP_LANGUAGES', 'en,tr')),
 
     'name' => env('APP_NAME', 'Laravel'),
 

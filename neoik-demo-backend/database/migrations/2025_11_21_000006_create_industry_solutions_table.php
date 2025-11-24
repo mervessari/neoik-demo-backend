@@ -8,12 +8,12 @@ return new class extends Migration {
     {
         Schema::create('industry_solutions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('badge')->nullable();
-            $table->string('subtitle')->nullable();
-            $table->string('manufacturing')->nullable();
-            $table->string('healthcare')->nullable();
-            $table->string('retail')->nullable();
+            $table->json('title')->nullable();
+            $table->json('badge')->nullable();
+            $table->json('subtitle')->nullable();
+            $table->json('manufacturing')->nullable();
+            $table->json('healthcare')->nullable();
+            $table->json('retail')->nullable();
             $table->timestamps();
         });
     }

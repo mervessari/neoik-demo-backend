@@ -2,17 +2,18 @@
 
 namespace App\Http\Requests\Nav;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseFormRequest;
 
-class NavUpdateRequest extends FormRequest
+class NavUpdateRequest extends BaseFormRequest
 {
     public function rules(): array
     {
-        return [
-            'hr_solutions'       => ['sometimes', 'string', 'max:255'],
-            'industry_solutions' => ['sometimes', 'string', 'max:255'],
-            'clients'            => ['sometimes', 'string', 'max:255'],
-            'contact'            => ['sometimes', 'string', 'max:255'],
-        ];
+        return array_merge(
+            $this->translatableRules('title'),
+            $this->translatableRules('hr_solutions'),
+            $this->translatableRules('industry_solutions'),
+            $this->translatableRules('clients'),
+            $this->translatableRules('contact')
+        );
     }
 }
