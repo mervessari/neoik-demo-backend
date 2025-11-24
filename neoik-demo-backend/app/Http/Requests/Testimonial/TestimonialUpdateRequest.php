@@ -3,8 +3,6 @@
 namespace App\Http\Requests\Testimonial;
 
 use App\Http\Requests\BaseFormRequest;
-use Faker\Provider\Base;
-use Illuminate\Foundation\Http\FormRequest;
 
 class TestimonialUpdateRequest extends BaseFormRequest
 {

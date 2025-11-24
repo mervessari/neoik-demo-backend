@@ -3,8 +3,6 @@
 namespace App\Http\Requests\Hero;
 
 use App\Http\Requests\BaseFormRequest;
-use Illuminate\Foundation\Http\FormRequest;
-
 class HeroUpdateRequest extends BaseFormRequest
 {
     public function rules(): array

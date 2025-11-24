@@ -3,8 +3,6 @@
 namespace App\Http\Requests\Testimonial;
 
 use App\Http\Requests\BaseFormRequest;
-use Illuminate\Foundation\Http\FormRequest;
-
 class TestimonialStoreRequest extends BaseFormRequest
 {
     public function rules(): array

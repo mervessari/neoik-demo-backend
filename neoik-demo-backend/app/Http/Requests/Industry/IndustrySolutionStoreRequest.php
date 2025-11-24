@@ -2,19 +2,19 @@
 
 namespace App\Http\Requests\Industry;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseFormRequest;
 
-class IndustrySolutionStoreRequest extends FormRequest
+class IndustrySolutionStoreRequest extends BaseFormRequest
 {
     public function rules(): array
     {
-        return [
-            'badge'        => ['nullable', 'string', 'max:255'],
-            'title'        => ['required', 'string', 'max:255'],
-            'subtitle'     => ['nullable', 'string', 'max:500'],
-            'manufacturing'=> ['nullable', 'string'],
-            'healthcare'   => ['nullable', 'string'],
-            'retail'       => ['nullable', 'string'],
-        ];
+        return array_merge(
+            $this->translatableRules('badge'),
+            $this->translatableRules('title'),
+            $this->translatableRules('subtitle'),
+            $this->translatableRules('manufacturing'),
+            $this->translatableRules('healthcare'),
+            $this->translatableRules('retail')
+        );
     }
 }

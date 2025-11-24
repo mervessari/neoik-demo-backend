@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Hero;
 
 use App\Http\Requests\BaseFormRequest;
-use Illuminate\Foundation\Http\FormRequest;
 
 class HeroStoreRequest extends BaseFormRequest
 
