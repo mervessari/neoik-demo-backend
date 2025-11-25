@@ -3,38 +3,34 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
 
 class BaseException extends Exception
 {
-    protected int $status;
-    protected mixed $errors;
-    protected mixed $meta;
-
     public function __construct(
-        string $message = '',
-        int $status = 400,
-        mixed $errors = null,
-        mixed $meta = null
+        string $message = 'Unexpected error',
+        protected int $status = 400,
+        protected mixed $errors = null,
+        protected mixed $meta = null
     ) {
         parent::__construct($message);
-
-        $this->status = $status;
-        $this->errors = $errors;
-        $this->meta = $meta;
     }
 
-    public function getStatus(): int
+    public function render(): JsonResponse
     {
-        return $this->status;
-    }
+        $response = [
+            'success' => false,
+            'message' => $this->getMessage(),
+        ];
 
-    public function getErrors(): mixed
-    {
-        return $this->errors;
-    }
+        if ($this->errors) {
+            $response['errors'] = $this->errors;
+        }
 
-    public function getMeta(): mixed
-    {
-        return $this->meta;
+        if ($this->meta) {
+            $response['meta'] = $this->meta;
+        }
+
+        return response()->json($response, $this->status);
     }
 }

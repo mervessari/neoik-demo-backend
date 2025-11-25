@@ -3,39 +3,12 @@
 namespace App\Repositories;
 
 use App\Models\Testimonial;
+use Illuminate\Database\Eloquent\Model;
 
-class TestimonialsRepository
+class TestimonialsRepository extends BaseRepository
 {
-    public function all()
+    protected function model(): Model
     {
-        return Testimonial::all();
-    }
-
-    public function findNullable($id)
-    {
-        return Testimonial::find($id);
-    }
-
-    public function create(array $data)
-    {
-        return Testimonial::create($data);
-    }
-
-    public function update($id, array $data)
-    {
-        $item = Testimonial::find($id);
-        if (!$item) return null;
-
-        $item->update($data);
-        return $item;
-    }
-
-    public function delete($id)
-    {
-        $item = Testimonial::find($id);
-        if (!$item) return false;
-
-        $item->delete();
-        return true;
+        return new Testimonial();
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Traits\ApiResponse;
 use App\Http\Resources\HeroResource;
 use App\Services\HeroService;
 use App\Http\Requests\Hero\HeroStoreRequest;
@@ -11,15 +10,14 @@ use App\Http\Requests\Hero\HeroUpdateRequest;
 
 class HeroController extends Controller
 {
-    use ApiResponse;
-
     public function __construct(
         protected HeroService $service
     ) {}
 
     public function index()
     {
-        $items = $this->service->list();
+        $items = $this->service->all();
+
         return $this->success(
             HeroResource::collection($items)
         );
@@ -28,6 +26,7 @@ class HeroController extends Controller
     public function show($id)
     {
         $item = $this->service->find($id);
+
         return $this->success(
             new HeroResource($item)
         );
@@ -36,6 +35,7 @@ class HeroController extends Controller
     public function store(HeroStoreRequest $request)
     {
         $item = $this->service->create($request->validated());
+
         return $this->success(
             new HeroResource($item),
             'Created',
@@ -46,6 +46,7 @@ class HeroController extends Controller
     public function update(HeroUpdateRequest $request, $id)
     {
         $item = $this->service->update($id, $request->validated());
+
         return $this->success(
             new HeroResource($item),
             'Updated'
@@ -55,6 +56,7 @@ class HeroController extends Controller
     public function destroy($id)
     {
         $this->service->delete($id);
+
         return $this->success(null, 'Deleted');
     }
 }

@@ -6,43 +6,37 @@ use Illuminate\Http\JsonResponse;
 
 trait ApiResponse
 {
-    private function sendResponse(bool $success, int $status, $data = null, $message = null, $errors = null, $meta = null): JsonResponse
-    {
-        $payload = [
-            'success' => $success,
+    protected function success(
+        mixed $data = null,
+        string $message = 'Success',
+        int $status = 200
+    ): JsonResponse {
+        $response = [
+            'success' => true,
+            'message' => $message,
         ];
 
-        if ($message !== null) {
-            $payload['message'] = $message;
+        if (!is_null($data)) {
+            $response['data'] = $data;
         }
 
-        if ($data !== null) {
-            $payload['data'] = $data;
-        }
-
-        if ($errors !== null) {
-            $payload['errors'] = $errors;
-        }
-
-        if ($meta !== null) {
-            $payload['meta'] = $meta;
-        }
-
-        return response()->json($payload, $status);
+        return response()->json($response, $status);
     }
 
-    public function success($data = null, ?string $message = null, int $status = 200, $meta = null): JsonResponse
-    {
-        return $this->sendResponse(true, $status, $data, $message, null, $meta);
-    }
+    protected function error(
+        string $message = 'Error',
+        int $status = 400,
+        mixed $errors = null
+    ): JsonResponse {
+        $response = [
+            'success' => false,
+            'message' => $message,
+        ];
 
-    public function error(?string $message, int $status = 400, $errors = null, $meta = null): JsonResponse
-    {
-        return $this->sendResponse(false, $status, null, $message, $errors, $meta);
-    }
+        if (!is_null($errors)) {
+            $response['errors'] = $errors;
+        }
 
-    public function validation($errors, ?string $message = 'Error Validation', int $status = 422, $meta = null): JsonResponse
-    {
-        return $this->sendResponse(false, $status, null, $message, $errors, $meta);
+        return response()->json($response, $status);
     }
 }
