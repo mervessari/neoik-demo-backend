@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Repositories;
@@ -21,5 +20,5 @@ class HeroRepository extends BaseRepository
         return Hero::where('badge', $badge)->exists();
     }
 }
-    {
+
 
