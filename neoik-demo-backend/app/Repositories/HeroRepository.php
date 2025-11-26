@@ -5,8 +5,6 @@ namespace App\Repositories;
 use App\Models\Hero;
 use Illuminate\Database\Eloquent\Model;
 
-
-
 class HeroRepository extends BaseRepository
 {
     protected function model(): Model
@@ -14,9 +12,13 @@ class HeroRepository extends BaseRepository
         return new Hero();
     }
 
-    public function existsBadge($badge)
+    public function existsBadge(?string $badge): bool
     {
+        if (!$badge) {
+            return false;
+        }
         return Hero::where('badge', $badge)->exists();
     }
 }
+
 

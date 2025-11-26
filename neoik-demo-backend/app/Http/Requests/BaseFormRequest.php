@@ -26,6 +26,6 @@ abstract class BaseFormRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        // override needed
+    // override needed
     }
 }
