@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Traits\ApiResponse;
 use App\Http\Resources\HrSolutionResource;
 use App\Services\HrSolutionsService;
 use App\Http\Requests\Hr\HrSolutionStoreRequest;
@@ -11,15 +10,14 @@ use App\Http\Requests\Hr\HrSolutionUpdateRequest;
 
 class HrSolutionsController extends Controller
 {
-    use ApiResponse;
-
     public function __construct(
         protected HrSolutionsService $service
     ) {}
 
     public function index()
     {
-        $items = $this->service->list();
+        $items = $this->service->all();
+
         return $this->success(
             HrSolutionResource::collection($items)
         );
@@ -28,6 +26,7 @@ class HrSolutionsController extends Controller
     public function show($id)
     {
         $item = $this->service->find($id);
+
         return $this->success(
             new HrSolutionResource($item)
         );
@@ -36,6 +35,7 @@ class HrSolutionsController extends Controller
     public function store(HrSolutionStoreRequest $request)
     {
         $item = $this->service->create($request->validated());
+
         return $this->success(
             new HrSolutionResource($item),
             'Created',
@@ -46,6 +46,7 @@ class HrSolutionsController extends Controller
     public function update(HrSolutionUpdateRequest $request, $id)
     {
         $item = $this->service->update($id, $request->validated());
+
         return $this->success(
             new HrSolutionResource($item),
             'Updated'
@@ -55,6 +56,7 @@ class HrSolutionsController extends Controller
     public function destroy($id)
     {
         $this->service->delete($id);
+
         return $this->success(null, 'Deleted');
     }
 }
