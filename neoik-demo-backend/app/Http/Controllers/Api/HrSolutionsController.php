@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\BaseController;
-use App\Traits\ApiResponse;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\HrSolutionResource;
 use App\Services\HrSolutionsService;
 use App\Http\Requests\Hr\HrSolutionStoreRequest;
 use App\Http\Requests\Hr\HrSolutionUpdateRequest;
 
-class HrSolutionsController extends BaseController
+class HrSolutionsController extends Controller
 {
     public function __construct(
         protected HrSolutionsService $service
     ) {}
 
-    public function index(HrSolutionStoreRequest $request)
+    public function index()
     {
-        $badge = $request->validated()['badge'] ?? null;
-        $items = $this->service->list($badge);
+        $items = $this->service->all();
+
         return $this->success(
             HrSolutionResource::collection($items)
         );
@@ -35,9 +34,7 @@ class HrSolutionsController extends BaseController
 
     public function store(HrSolutionStoreRequest $request)
     {
-        $item = $this->service->create(
-            $request->validated()
-        );
+        $item = $this->service->create($request->validated());
 
         return $this->success(
             new HrSolutionResource($item),
@@ -48,10 +45,7 @@ class HrSolutionsController extends BaseController
 
     public function update(HrSolutionUpdateRequest $request, $id)
     {
-        $item = $this->service->update(
-            $id,
-            $request->validated()
-        );
+        $item = $this->service->update($id, $request->validated());
 
         return $this->success(
             new HrSolutionResource($item),

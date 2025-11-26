@@ -3,34 +3,17 @@
 namespace App\Services;
 
 use App\Repositories\HeroRepository;
-use App\Exceptions\NotFoundException;
 use App\Exceptions\ConflictException;
 
-class HeroService
+class HeroService extends BaseService
 {
     public function __construct(
         protected HeroRepository $repository
     ) {}
 
-    private function getOrFail($id)
+    protected function repository()
     {
-        $item = $this->repository->findNullable($id);
-
-        if (! $item) {
-            throw new NotFoundException("Hero #{$id} bulunamadı.");
-        }
-
-        return $item;
-    }
-
-    public function list()
-    {
-        return $this->repository->all();
-    }
-
-    public function find($id)
-    {
-        return $this->getOrFail($id);
+        return $this->repository;
     }
 
     public function create(array $data)
@@ -39,10 +22,10 @@ class HeroService
             throw new ConflictException("Bu badge zaten kullanılıyor.");
         }
 
-        return $this->repository->create($data);
+        return parent::create($data);
     }
 
-    public function update($id, array $data)
+    public function update(int $id, array $data)
     {
         $hero = $this->getOrFail($id);
 
@@ -52,13 +35,6 @@ class HeroService
             }
         }
 
-        return $this->repository->update($id, $data);
-    }
-
-    public function delete($id)
-    {
-        $this->getOrFail($id);
-
-        return $this->repository->delete($id);
+        return parent::update($id, $data);
     }
 }

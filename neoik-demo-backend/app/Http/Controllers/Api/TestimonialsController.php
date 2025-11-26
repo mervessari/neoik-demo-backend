@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Traits\ApiResponse;
 use App\Http\Resources\TestimonialResource;
 use App\Services\TestimonialsService;
 use App\Http\Requests\Testimonial\TestimonialStoreRequest;
@@ -17,16 +16,12 @@ class TestimonialsController extends Controller
 
     public function index()
     {
-        $items = $this->service->list(request('badge'));
+        $items = $this->service->all();
 
-        public function index(TestimonialStoreRequest $request)
-        {
-            $badge = $request->validated()['badge'] ?? null;
-            $items = $this->service->list($badge);
-            return $this->success(
-                TestimonialResource::collection($items)
-            );
-        }
+        return $this->success(
+            TestimonialResource::collection($items)
+        );
+    }
 
     public function show($id)
     {
@@ -39,9 +34,7 @@ class TestimonialsController extends Controller
 
     public function store(TestimonialStoreRequest $request)
     {
-        $item = $this->service->create(
-            $request->validated()
-        );
+        $item = $this->service->create($request->validated());
 
         return $this->success(
             new TestimonialResource($item),
@@ -52,10 +45,7 @@ class TestimonialsController extends Controller
 
     public function update(TestimonialUpdateRequest $request, $id)
     {
-        $item = $this->service->update(
-            $id,
-            $request->validated()
-        );
+        $item = $this->service->update($id, $request->validated());
 
         return $this->success(
             new TestimonialResource($item),

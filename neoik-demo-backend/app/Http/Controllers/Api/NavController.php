@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Traits\ApiResponse;
 use App\Http\Resources\NavResource;
 use App\Services\NavService;
 use App\Http\Requests\Nav\NavStoreRequest;
@@ -17,20 +16,12 @@ class NavController extends Controller
 
     public function index()
     {
-        $items = $this->service->list(request('clients'));
+        $items = $this->service->all();
 
         return $this->success(
             NavResource::collection($items)
         );
     }
-        public function index(NavStoreRequest $request)
-        {
-            $badge = $request->validated()['badge'] ?? null;
-            $items = $this->service->list($badge);
-            return $this->success(
-                NavResource::collection($items)
-            );
-        }
 
     public function show($id)
     {
@@ -43,9 +34,7 @@ class NavController extends Controller
 
     public function store(NavStoreRequest $request)
     {
-        $item = $this->service->create(
-            $request->validated()
-        );
+        $item = $this->service->create($request->validated());
 
         return $this->success(
             new NavResource($item),
@@ -56,10 +45,7 @@ class NavController extends Controller
 
     public function update(NavUpdateRequest $request, $id)
     {
-        $item = $this->service->update(
-            $id,
-            $request->validated()
-        );
+        $item = $this->service->update($id, $request->validated());
 
         return $this->success(
             new NavResource($item),
