@@ -6,37 +6,67 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseRepository
 {
+    /**
+     * Her repository kendi model instance’ını döndürür.
+     */
     abstract protected function model(): Model;
 
+    /**
+     * Tüm kayıtları getir.
+     */
     public function all()
     {
         return $this->model()->get();
     }
 
-    public function find($id)
+    /**
+     * Nullable find.
+     */
+    public function findNullable(int $id)
     {
         return $this->model()->find($id);
     }
 
+    /**
+     * Zorunlu find (bulamazsa null döner).
+     */
+    public function find(int $id)
+    {
+        return $this->model()->find($id);
+    }
+
+    /**
+     * Kayıt oluştur.
+     */
     public function create(array $data)
     {
         return $this->model()->create($data);
     }
 
-    public function update($id, array $data)
+    /**
+     * Kayıt güncelle.
+     */
+    public function update(int $id, array $data)
     {
-        $model = $this->find($id);
-        if (!$model) return null;
+        $item = $this->findNullable($id);
+        if (!$item) {
+            return null;
+        }
 
-        $model->update($data);
-        return $model;
+        $item->update($data);
+        return $item;
     }
 
-    public function delete($id)
+    /**
+     * Kayıt sil.
+     */
+    public function delete(int $id): bool
     {
-        $model = $this->find($id);
-        if (!$model) return false;
+        $item = $this->findNullable($id);
+        if (!$item) {
+            return false;
+        }
 
-        return $model->delete();
+        return (bool) $item->delete();
     }
 }
